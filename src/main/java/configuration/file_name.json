@@ -18,13 +18,13 @@
   "Messages-Chat.txt": "CHATS",
   "Messages-Emails.txt": "EMAILS",
   "Messages-MMS.txt": "MMS",
-  "": "SMS",
-  "": "MESSEGES_STATUS_UPDATES",
-  "": "CALENDAR_EVENTS",
-  "": "NOTES",
-  "": "TASKS",
-  "": "ACCOUNTS",
-  "": "WEB_BOOKMARKS",
-  "": "WEB_COOKIES",
-  "": "WEB_HISTORY"
+  "Messages-SMS.txt": "SMS",
+  "Messages-Status Updates.txt": "MESSAGES_STATUS_UPDATES",
+  "Organizer-Calendar Events.txt": "CALENDAR_EVENTS",
+  "Organizer-Notes.txt": "NOTES",
+  "Organizer-Tasks.txt": "TASKS",
+  "Security-Accounts.txt": "ACCOUNTS",
+  "Web-Bookmarks.txt": "WEB_BOOKMARKS",
+  "Web-Cookies.txt": "WEB_COOKIES",
+  "Web-History.txt": "WEB_HISTORY"
 }
