@@ -1,6 +1,7 @@
 package enums;
 
 public enum eParser {
+    NONE,
     CALLS,
     CONTACTS,
     DEVICE_EVENT,

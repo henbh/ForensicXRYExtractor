@@ -1,15 +1,15 @@
 package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import datamodule.CallParser;
 import datamodule.XryParser;
+import enums.eParser;
 import org.apache.log4j.Logger;
-import streams.BasicStreamTwoWays;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class XryExtractor {
     private String _filePath;
@@ -23,22 +23,68 @@ public class XryExtractor {
 
     public ArrayList execute() {
         ArrayList<String> arrayList = new ArrayList<>();
-        createNewParser();
+        boolean isParser = createNewParser();
+        if (isParser) {
+            _xryParser.Parse();
+        } else {
+            arrayList.add("");
+        }
+
         return arrayList;
     }
 
-    private XryParser createNewParser() {
+    private boolean createNewParser() {
         XryParser xryParser = null;
+        StringBuilder jsonFileContent = new StringBuilder("");
+        HashMap<String, String> map;
+        String fileName = null;
+        boolean result = true;
+        eParser parserType = eParser.NONE;
 
         try {
-            String jsonFilePath = new java.io.File("/configuration/file_name.json").getCanonicalPath();
-            HashMap<String, Object> result =
-                    new ObjectMapper().readValue(readFile(jsonFilePath), HashMap.class);
+            fileName = new File(_filePath).getName();
+            ClassLoader classLoader = getClass().getClassLoader();
+            File file = new File(classLoader.getResource("parsers_types.json").getFile());
+
+            try (Scanner scanner = new Scanner(file)) {
+
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    jsonFileContent.append(line).append("\n");
+                }
+
+                scanner.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                result = false;
+            }
+
+            map = new ObjectMapper().readValue(jsonFileContent.toString(), HashMap.class);
+
         } catch (Exception ex) {
+            map = null;
+            result = false;
             _logger.error("Error in createNewParser Method :: ", ex);
         }
 
-        return xryParser;
+        if (map != null) {
+            parserType = enums.eParser.valueOf(map.get(fileName));
+        }
+
+        switch (parserType) {
+            case CALLS:
+                _xryParser = new CallParser(_filePath, _logger);
+                break;
+            case CONTACTS:
+                //_xryParser = new
+                break;
+            case NONE:
+                result = false;
+                break;
+        }
+
+        return result;
     }
 
     private String readFile(String file) throws IOException {
