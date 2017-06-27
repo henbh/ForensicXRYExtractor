@@ -21,12 +21,14 @@ public class CallParser extends XryParser {
         if (fileTextContent != null) {
             ArrayList<String> callList = new ArrayList<>(Arrays.asList(fileTextContent.split("#")));
             for (String item : callList) {
-                if (item.contains("Index")) {
-                    item = item.replace("\n","@");
-                    item = item.replace("\t\t\t",":");
-                    item = item.replace("\t\t",":");
-                    item = item.replace("\t",":");
-                    item = item.replace("\r","");
+                if (item.contains("Time")) {
+                    HashMap jsonCall = new HashMap(jsonObject);
+
+                    item = item.replace("\n", "@");
+                    item = item.replace("\t\t\t", ":");
+                    item = item.replace("\t\t", ":");
+                    item = item.replace("\t", ":");
+                    item = item.replace("\r", "");
                     ArrayList<String> callLineList = new ArrayList<>(Arrays.asList(item.split("@")));
                     for (String item1 : callLineList) {
                         ArrayList<String> rowValue = new ArrayList<>(Arrays.asList(item1.split("::")));
@@ -35,39 +37,42 @@ public class CallParser extends XryParser {
                             String value = rowValue.get(1);
 
                             if (field.contains("Related Application")) {
-                                jsonObject.put("source", value);
+                                jsonCall.put("source", value);
                             } else if (field.contains("Call Type")) {
-                                if(value.contains("Dialed"))
-                                {
-                                    jsonObject.put("solan_subtype", "Outgoing");
-                                }else if(value.contains("Received")) {
-                                    jsonObject.put("solan_subtype", "Incoming");
-                                }else {
+                                if (value.contains("Dialed")) {
+                                    jsonCall.put("solan_subtype", "Outgoing");
+                                } else if (value.contains("Received")) {
+                                    jsonCall.put("solan_subtype", "Incoming");
+                                } else {
                                     //missed
-                                    jsonObject.put("solan_subtype", value);
+                                    jsonCall.put("solan_subtype", value);
                                 }
                             } else if (field.contains("Time")) {
-                                jsonObject.put("solan_context_time", value.replace(" (Device)",""));
+                                jsonCall.put("solan_context_time", value.replace(" (Device)", ""));
                             } else if (field.contains("Duration")) {
-                                jsonObject.put("duration", value);
+                                jsonCall.put("duration", value);
                             } else if (field.contains("Network Type")) {
-                                jsonObject.put("network_type", value);
-                            }else if (field.contains("Network Type")) {
-                                jsonObject.put("network_type", value);
-                            }else if (field.contains("Tel")) {
-                                jsonObject.put("number", value);
-                            }else if (field.contains("Country")) {
-                                jsonObject.put("country", value);
-                            }
-                            else if (field.contains("Name")) {
-                                jsonObject.put("identifier", value);
-                                jsonObject.put("name", value);
+                                jsonCall.put("network_type", value);
+                            } else if (field.contains("Network Type")) {
+                                jsonCall.put("network_type", value);
+                            } else if (field.contains("Tel")) {
+                                jsonCall.put("number", value);
+                            } else if (field.contains("Country")) {
+                                jsonCall.put("country", value);
+                            } else if (field.contains("Name")) {
+                                jsonCall.put("identifier", value);
+                                jsonCall.put("name", value);
+                            } else if (field.contains("Viber")) {
+                                jsonCall.put("call_id", value);
+                            } else if (field.contains("WeChat ID")) {
+                                jsonCall.put("call_id", value);
+                            } else if (field.contains("Related Account")) {
+                                jsonCall.put("related_account", value);
                             }
                         }
                     }
 
-                    if(jsonObject.get("solan_subtype")!= null && jsonObject.get("solan_subtype") != "")
-                    {
+                    if (jsonCall.get("solan_subtype") != null && jsonCall.get("solan_subtype") != "") {
                         //insert elastic
                     }
                 }

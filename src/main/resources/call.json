@@ -16,5 +16,7 @@
   "timestamp": "",
   "source": "",
   "country": "",
-  "network_type": ""
+  "network_type": "",
+  "related_account":"",
+  "call_id":""
 }
