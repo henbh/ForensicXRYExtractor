@@ -14,21 +14,36 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class XryParser implements IXryParser {
     public String _filePath;
     public Logger _logger;
+    public HashMap _jsonDocument;
 
     public XryParser(String filePath, Logger logger) {
         _filePath = filePath;
         _logger = logger;
+        _jsonDocument = new HashMap();
     }
 
     @Override
-    public void Parse() {
+    public ArrayList Parse() {
+        return null;
+    }
 
+    public Boolean saveToES(String doc) {
+        boolean result = true;
+
+        try {
+
+        } catch (Exception ex) {
+            _logger.error("Save doc to ES - Failled!!!!", ex);
+        }
+
+        return result;
     }
 
     public String readFileText(File file) {
@@ -94,17 +109,15 @@ public class XryParser implements IXryParser {
         return attr;
     }
 
-    public HashMap fillSolanJason(HashMap json, boolean isFile){
+    public HashMap fillSolanJason(HashMap json, boolean isFile) {
         HashMap<String, String> attr = solanBaseStringAttributes(_filePath);
 
-        if(attr != null && attr.size()>0)
-        {
+        if (attr != null && attr.size() > 0) {
             attr.put("solan_device", attr.get("solan_device"));
             attr.put("solan_case", attr.get("solan_case"));
             attr.put("solan_poi", attr.get("solan_poi"));
 
-            if(isFile)
-            {
+            if (isFile) {
                 attr.put("solan_path", attr.get("solan_path"));
             }
         }

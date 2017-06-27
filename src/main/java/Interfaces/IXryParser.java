@@ -1,8 +1,7 @@
 package Interfaces;
 
-/**
- * Created by henbh on 26/06/2017.
- */
+import java.util.ArrayList;
+
 public interface IXryParser {
-    public void Parse();
+    public ArrayList Parse();
 }
