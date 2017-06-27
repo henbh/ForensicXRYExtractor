@@ -36,10 +36,7 @@ public class XryParser implements IXryParser {
 
         if (file.exists()) {
             try {
-                if(!file.getName().contains("json")) {
-                    convertFileEncodeToUTF8(file.getPath());
-                }
-                String content = FileUtils.readFileToString(file, "UTF-8");
+                String content = FileUtils.readFileToString(file, "utf-8");
                 fileContent = content;
             } catch (Exception ex) {
                 _logger.error("Error in readFileText Method", ex);
@@ -66,19 +63,5 @@ public class XryParser implements IXryParser {
         }
 
         return result;
-    }
-
-    private void convertFileEncodeToUTF8(String filePath) {
-        Path p = Paths.get(filePath);
-        ByteBuffer bb = null;
-
-        try {
-            bb = ByteBuffer.wrap(Files.readAllBytes(p));
-            CharBuffer cb = Charset.forName("UTF-16LE").decode(bb);
-            bb = Charset.forName("UTF-8").encode(cb);
-            Files.write(p, bb.array());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
