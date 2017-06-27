@@ -64,4 +64,51 @@ public class XryParser implements IXryParser {
 
         return result;
     }
+
+    public HashMap<String, String> solanBaseStringAttributes(String realPath) {
+        HashMap<String, String> attr = new HashMap<>();
+        try {
+            String path = realPath;
+
+            //path = path.substring(path.indexOf("\\storage")).replace("\\", "/");
+
+
+            String solanCase = path.substring(path.indexOf("/cases/") + 7);
+            String caseName = solanCase.substring(0, solanCase.indexOf("/"));
+
+            String solanDevice = path.substring(path.indexOf("/devices/") + 9);
+
+            String deviceName = solanDevice.substring(solanDevice.indexOf("/") + 1);
+            deviceName = deviceName.substring(0, deviceName.indexOf("/"));
+
+            String poi = "Device Owner";
+            attr.put("solan_device", deviceName);
+            attr.put("solan_case", caseName);
+            attr.put("solan_poi", poi);
+            attr.put("solan_path", path);
+
+        } catch (Exception e) {
+            System.out.println("Solan Base attribute extracting error ");
+        }
+
+        return attr;
+    }
+
+    public HashMap fillSolanJason(HashMap json, boolean isFile){
+        HashMap<String, String> attr = solanBaseStringAttributes(_filePath);
+
+        if(attr != null && attr.size()>0)
+        {
+            attr.put("solan_device", attr.get("solan_device"));
+            attr.put("solan_case", attr.get("solan_case"));
+            attr.put("solan_poi", attr.get("solan_poi"));
+
+            if(isFile)
+            {
+                attr.put("solan_path", attr.get("solan_path"));
+            }
+        }
+
+        return json;
+    }
 }
