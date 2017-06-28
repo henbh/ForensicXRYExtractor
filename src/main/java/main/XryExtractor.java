@@ -1,7 +1,9 @@
 package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import configuration.ConfigurationManager;
 import datamodule.CallParser;
+import datamodule.ContactParser;
 import datamodule.XryParser;
 import enums.eParser;
 import org.apache.log4j.Logger;
@@ -25,7 +27,7 @@ public class XryExtractor {
         ArrayList<String> arrayList = new ArrayList<>();
         boolean isParser = createNewParser();
         if (isParser) {
-            _xryParser.Parse();
+            arrayList = _xryParser.Parse();
         } else {
             arrayList.add("");
         }
@@ -34,34 +36,40 @@ public class XryExtractor {
     }
 
     private boolean createNewParser() {
-        XryParser xryParser = null;
         StringBuilder jsonFileContent = new StringBuilder("");
-        HashMap<String, String> map;
+        HashMap<String, String> map = null;
         String fileName = null;
         boolean result = true;
         eParser parserType = eParser.NONE;
 
         try {
             fileName = new File(_filePath).getName();
-            ClassLoader classLoader = getClass().getClassLoader();
-            File file = new File(classLoader.getResource("parsers_types.json").getFile());
+            //System.out.println(ConfigurationManager.getInstance().parsers_types_json_path);
+//            ClassLoader classLoader = this.getClass().getClassLoader();
+            File file = new File(ConfigurationManager.getInstance().parsers_types_json_path);
 
-            try (Scanner scanner = new Scanner(file)) {
+            if (file.exists()) {
+                try (Scanner scanner = new Scanner(file)) {
 
-                while (scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
-                    jsonFileContent.append(line).append("\n");
+                    while (scanner.hasNextLine()) {
+                        String line = scanner.nextLine();
+                        jsonFileContent.append(line).append("\n");
+                    }
+
+                    scanner.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    result = false;
                 }
 
-                scanner.close();
+                //System.out.println("---------------" + jsonFileContent);
+                //_logger.info("---------------" + jsonFileContent);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-                result = false;
+                map = new ObjectMapper().readValue(jsonFileContent.toString(), HashMap.class);
+            } else {
+                _logger.info("parsers_types.json not exist!!!!!!!");
             }
-
-            map = new ObjectMapper().readValue(jsonFileContent.toString(), HashMap.class);
-
         } catch (Exception ex) {
             map = null;
             result = false;
@@ -77,7 +85,7 @@ public class XryExtractor {
                 _xryParser = new CallParser(_filePath, _logger);
                 break;
             case CONTACTS:
-                //_xryParser = new
+                _xryParser = new ContactParser(_filePath, _logger);
                 break;
             case NONE:
                 result = false;
@@ -85,23 +93,5 @@ public class XryExtractor {
         }
 
         return result;
-    }
-
-    private String readFile(String file) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        String ls = System.getProperty("line.separator");
-
-        try {
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append(ls);
-            }
-
-            return stringBuilder.toString();
-        } finally {
-            reader.close();
-        }
     }
 }

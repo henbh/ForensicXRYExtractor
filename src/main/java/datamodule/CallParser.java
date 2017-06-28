@@ -1,22 +1,22 @@
 package datamodule;
 
-import configuration.CallConfiguration;
+import configuration.ConfigurationManager;
+import objectconfiguration.CallConfiguration;
 import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 import org.joda.time.DateTime;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 
 public class CallParser extends XryParser {
     public CallParser(String filePath, Logger logger) {
         super(filePath, logger);
-        _jsonDocument = readJsonObject("call.json");
+        //System.out.println(ConfigurationManager.getInstance().call_json_path);
+        _jsonDocument = readJsonObject(ConfigurationManager.getInstance().call_json_path);
         _jsonDocument = fillSolanJason(_jsonDocument, false);
         _jsonDocument.put("solan_type", "call");
     }
@@ -33,7 +33,7 @@ public class CallParser extends XryParser {
             for (String item : callsList) {
                 if (item.contains("Time")) {
                     HashMap callJsonDoc = extractCall(item);
-                    saveToES(new JSONObject(callJsonDoc).toString());
+                    saveDocToDB(new JSONObject(callJsonDoc).toString());
                 }
             }
         }
@@ -72,9 +72,6 @@ public class CallParser extends XryParser {
                             String format = "MM/dd/yyyy hh:mm:ss a z";
                             DateTime date = DateTime.parse(value, DateTimeFormat.forPattern(format));
 
-//                            String date = value.replaceAll("[^\\d./: ]", "");
-//                            DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
-
                             jsonCall.put(item.toString(),date.toString());
                         }else {
                             jsonCall.put(item.toString(), value);
@@ -86,6 +83,7 @@ public class CallParser extends XryParser {
 
         jsonCall.put("solan_inserted_timestamp", DateTime.now().toString());
 
+        System.out.println(jsonCall);
         return jsonCall;
     }
 

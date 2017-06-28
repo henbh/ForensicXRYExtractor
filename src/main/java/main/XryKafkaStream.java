@@ -10,9 +10,7 @@ public class XryKafkaStream extends BasicStreamTwoWays {
         BasicStreamTwoWays basicStreamTwoWay = new XryKafkaStream();
 
         try {
-            //basicStreamTwoWay.streamMain();
-            XryKafkaStream xryKafkaStream = new XryKafkaStream();
-            xryKafkaStream.run("C:\\Dev\\XDR\\Solan\\Files\\iPhone4----AppleiPhone4GSM(A1332)-file\\rdisk0s2\\Calls.txt", null);
+            basicStreamTwoWay.streamMain();
         } catch (Exception e) {
             e.printStackTrace();
         }
