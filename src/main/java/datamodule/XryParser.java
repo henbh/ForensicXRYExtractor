@@ -7,13 +7,29 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import org.apache.http.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ConnectionRequest;
+import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.DefaultBHttpClientConnection;
+import org.apache.http.impl.DefaultConnectionReuseStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpEntityEnclosingRequest;
+import org.apache.http.protocol.*;
+import org.apache.http.util.EntityUtils;
+
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -38,6 +54,31 @@ public class XryParser implements IXryParser {
         boolean result = true;
 
         try {
+            System.out.println("Entered sendPostTest at " + LocalDateTime.now().toString());
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+
+            URI uri = new URIBuilder()
+                    .setScheme("http")
+                    .setHost("10.1.70.71")
+                    .setPort(8080)
+                    .build();
+
+            HttpPost httpPost = new HttpPost(uri);
+            httpPost.setEntity(
+                    new StringEntity(
+                            doc,
+                            ContentType.create("application/json", Consts.UTF_8)));
+            CloseableHttpResponse response2 = httpclient.execute(httpPost);
+
+            try {
+                System.out.println(response2.getStatusLine());
+                HttpEntity entity2 = response2.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+                EntityUtils.consume(entity2);
+            } finally {
+                response2.close();
+            }
 
         } catch (Exception ex) {
             _logger.error("Save doc to ES - Failled!!!!", ex);
@@ -45,6 +86,29 @@ public class XryParser implements IXryParser {
 
         return result;
     }
+
+//    private static void postToES(String document) throws IOException {
+//        URL url = new URL(
+//                String.format(
+//                        "%s/%s/%s",
+//                        "http\://10.1.70.71\:9200",
+//                        "main_solan",
+//                        esType
+//                )
+//        );
+//        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+//        httpCon.setDoOutput(true);
+//        httpCon.setRequestMethod("POST");
+//        OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+//        out.write(document);
+//        out.close();
+//        if (httpCon.getResponseCode() != 200 && httpCon.getResponseCode() != 201)
+//            System.out.printf(
+//                    "Failed to post document to ES. URL: %s\n document: %s\n",
+//                    url.toString(),
+//                    document
+//            );
+//    }
 
     public String readFileText(File file) {
         String fileContent = null;
@@ -121,6 +185,10 @@ public class XryParser implements IXryParser {
                 attr.put("solan_path", attr.get("solan_path"));
             }
         }
+
+        json.put("solan_device", "xyr_test");
+        json.put("solan_case", "xyr_test");
+        json.put("solan_poi", "xyr_test");
 
         return json;
     }
