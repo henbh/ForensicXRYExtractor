@@ -2,6 +2,7 @@ package datamodule;
 
 import configuration.ConfigurationManager;
 import objectconfiguration.CallConfiguration;
+import objectconfiguration.ContactConfiguration;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 public class ContactParser extends XryParser {
     public ContactParser(String filePath, Logger logger) {
         super(filePath, logger);
-        _jsonDocument = readJsonObject(ConfigurationManager.getInstance().call_json_path);
+        _jsonDocument = readJsonObject(ConfigurationManager.getInstance().contact_json_path);
         _jsonDocument = fillSolanJason(_jsonDocument, false);
         _jsonDocument.put("solan_type", "contact");
     }
@@ -45,9 +46,9 @@ public class ContactParser extends XryParser {
 
     private HashMap extractContact(String contact) {
         HashMap jsonContact = new HashMap(_jsonDocument);
-        String callText = textArragment(contact);
-        ArrayList<String> contactLines = new ArrayList<>(Arrays.asList(callText.split("@")));
-        CallConfiguration contactConfiguration = new CallConfiguration();
+        String contactText = textArragment(contact);
+        ArrayList<String> contactLines = new ArrayList<>(Arrays.asList(contactText.split("@")));
+        ContactConfiguration  contactConfiguration = new ContactConfiguration();
 
         for (String item1 : contactLines) {
             ArrayList<String> line = new ArrayList<>(Arrays.asList(item1.split("::")));
@@ -60,33 +61,22 @@ public class ContactParser extends XryParser {
 
                 if (jsonFields != null) {
                     for (String item: jsonFields) {
-
-                        if (item.toString() == "solan_subtype") {
-                            if (value.contains("Dialed")) {
-                                jsonCall.put(item.toString(), "Outgoing");
-                            } else if (value.contains("Received")) {
-                                jsonCall.put(item.toString(), "Incoming");
-                            } else {
-                                //missed
-                                jsonCall.put(item.toString(), value);
-                            }
-                        } else if(field.contains("Time")){
+                        if(field.contains("Created")){
                             String format = "MM/dd/yyyy hh:mm:ss a z";
                             DateTime date = DateTime.parse(value, DateTimeFormat.forPattern(format));
-
-                            jsonCall.put(item.toString(),date.toString());
+                            jsonContact.put(item.toString(),date.toString());
                         }else {
-                            jsonCall.put(item.toString(), value);
+                            jsonContact.put(item.toString(), value);
                         }
                     }
                 }
             }
         }
 
-        jsonCall.put("solan_inserted_timestamp", DateTime.now().toString());
+        jsonContact.put("solan_inserted_timestamp", DateTime.now().toString());
 
-        System.out.println(jsonCall);
-        return jsonCall;
+        System.out.println(jsonContact);
+        return jsonContact;
     }
 
     private String textArragment(String text) {
