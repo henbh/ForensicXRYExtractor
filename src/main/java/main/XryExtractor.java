@@ -2,10 +2,7 @@ package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.ConfigurationManager;
-import datamodule.CallParser;
-import datamodule.ContactParser;
-import datamodule.DeviceParser;
-import datamodule.XryParser;
+import datamodule.*;
 import enums.eParser;
 import org.apache.log4j.Logger;
 
@@ -90,6 +87,9 @@ public class XryExtractor {
                 break;
             case DEVICE_INFO:
                 _xryParser = new DeviceParser(_filePath, _logger);
+                break;
+            case SMS:
+                _xryParser = new MessageParser(_filePath, _logger);
                 break;
             case NONE:
                 result = false;
