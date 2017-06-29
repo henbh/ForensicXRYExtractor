@@ -14,6 +14,7 @@ public class ConfigurationManager {
 
     public String call_json_path;
     public String contact_json_path;
+    public String device_json_path;
     public String parsers_types_json_path;
 
     private static ConfigurationManager instance = null;
@@ -76,6 +77,7 @@ public class ConfigurationManager {
 
                 call_json_path = prop.getProperty("call_json_path");
                 contact_json_path = prop.getProperty("contact_json_path");
+                device_json_path = prop.getProperty("device_json_path");
                 parsers_types_json_path = prop.getProperty("parsers_types_json_path");
             } catch (Exception e) {
                 e.printStackTrace();

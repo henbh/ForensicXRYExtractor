@@ -1,4 +1,4 @@
-package objectconfiguration;
+package dataconfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class ContactConfiguration {
 
         ArrayList arrayList10 = new ArrayList();
         arrayList10.add("email");
-        fieldsMap.put("Email",arrayList9);
+        fieldsMap.put("Email",arrayList10);
 
         ArrayList arrayList11 = new ArrayList();
         arrayList11.add("related_account");

@@ -1,0 +1,21 @@
+{
+  "detected_model": null,
+  "solan_device": null,
+  "solan_poi": null,
+  "report_type": null,
+  "imsi": null,
+  "solan_inserted_timestamp": null,
+  "revision": null,
+  "solan_case": null,
+  "iccid": null,
+  "full_name": null,
+  "detected_manufacture": null,
+  "solan_type": null,
+  "imei": null,
+  "selected_model": null,
+  "owner_name": null,
+  "device_type":null,
+  "serial_number":null,
+  "device_id":null,
+  "phone_number":null
+}

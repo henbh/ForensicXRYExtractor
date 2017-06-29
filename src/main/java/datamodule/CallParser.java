@@ -1,7 +1,7 @@
 package datamodule;
 
 import configuration.ConfigurationManager;
-import objectconfiguration.CallConfiguration;
+import dataconfiguration.CallConfiguration;
 import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
@@ -18,7 +18,11 @@ public class CallParser extends XryParser {
         //System.out.println(ConfigurationManager.getInstance().call_json_path);
         _jsonDocument = readJsonObject(ConfigurationManager.getInstance().call_json_path);
         _jsonDocument = fillSolanJason(_jsonDocument, false);
-        _jsonDocument.put("solan_type", "call");
+        try {
+            _jsonDocument.put("solan_type", "call");
+        } catch (Exception e) {
+            _logger.error(e);
+        }
     }
 
     @Override
@@ -57,7 +61,7 @@ public class CallParser extends XryParser {
                 ArrayList<String> jsonFields = (ArrayList) callConfiguration.fieldsMap.get(field);
 
                 if (jsonFields != null) {
-                    for (String item: jsonFields) {
+                    for (String item : jsonFields) {
 
                         if (item.toString() == "solan_subtype") {
                             if (value.contains("Dialed")) {
@@ -68,12 +72,12 @@ public class CallParser extends XryParser {
                                 //missed
                                 jsonCall.put(item.toString(), value);
                             }
-                        } else if(field.contains("Time")){
+                        } else if (field.contains("Time")) {
                             String format = "MM/dd/yyyy hh:mm:ss a z";
                             DateTime date = DateTime.parse(value, DateTimeFormat.forPattern(format));
 
-                            jsonCall.put(item.toString(),date.toString());
-                        }else {
+                            jsonCall.put(item.toString(), date.toString());
+                        } else {
                             jsonCall.put(item.toString(), value);
                         }
                     }
@@ -96,7 +100,7 @@ public class CallParser extends XryParser {
             result = result.replace("\t\t", ":");
             result = result.replace("\t", ":");
             result = result.replace("\r", "");
-            result = result.replace(" (Device)","");
+            result = result.replace(" (Device)", "");
         } catch (Exception ex) {
             _logger.error(ex);
         }
