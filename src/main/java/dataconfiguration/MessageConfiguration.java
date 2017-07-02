@@ -42,7 +42,7 @@ public class MessageConfiguration {
         fieldsMap.put("Name (Matched)",arrayList7);
 
         ArrayList arrayList8 = new ArrayList();
-        arrayList8.add("id");
+        arrayList8.add("uid");
         fieldsMap.put("Unique ID",arrayList8);
 
         ArrayList arrayList9 = new ArrayList();

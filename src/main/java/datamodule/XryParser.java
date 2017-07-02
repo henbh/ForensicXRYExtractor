@@ -123,7 +123,7 @@ public class XryParser implements IXryParser {
             }
         } else {
             fileContent = null;
-            _logger.info("%s File not exist!");
+            _logger.info(file.getPath().toString()+" File not exist!");
         }
         return fileContent;
     }

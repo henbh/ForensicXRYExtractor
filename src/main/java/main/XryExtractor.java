@@ -91,6 +91,9 @@ public class XryExtractor {
             case SMS:
                 _xryParser = new MessageParser(_filePath, _logger);
                 break;
+            case CHATS:
+                _xryParser = new ChatParser(_filePath, _logger);
+                break;
             case NONE:
                 result = false;
                 break;

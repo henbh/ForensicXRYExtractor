@@ -14,7 +14,7 @@ public class DeviceConfiguration {
         fieldsMap = new HashMap();
 
         ArrayList arrayList1 = new ArrayList();
-        arrayList1.add("full_name");
+        arrayList1.add("fullName");
         fieldsMap.put("Device Name",arrayList1);
 
         ArrayList arrayList4 = new ArrayList();
@@ -26,12 +26,13 @@ public class DeviceConfiguration {
         fieldsMap.put("Manufacturer", arrayList2);
 
         ArrayList arrayList3 = new ArrayList();
-        arrayList3.add("revision");
+        arrayList3.add("device_info_internal_version");
+        arrayList3.add("device_info_os_type");
         fieldsMap.put("Revision",arrayList3);
 
         ArrayList arrayList7 = new ArrayList();
         arrayList7.add("detected_model");
-        arrayList7.add("selected_model");
+        arrayList7.add("device_info_detected_phone_model");
         fieldsMap.put("Model",arrayList7);
 
         ArrayList arrayList8 = new ArrayList();

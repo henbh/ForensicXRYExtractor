@@ -1,8 +1,8 @@
 package datamodule;
 
 import configuration.ConfigurationManager;
-import dataconfiguration.ContactConfiguration;
 import dataconfiguration.MessageConfiguration;
+import helpers.CallDirection;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -49,13 +49,17 @@ public class MessageParser extends XryParser {
     }
 
     private HashMap extractMessage(String msg) {
+        CallDirection callDirection = new CallDirection();
         HashMap jsonMsg = new HashMap(_jsonDocument);
         String msgtText = textArragment(msg);
         ArrayList<String> msgLines = new ArrayList<>(Arrays.asList(msgtText.split("%")));
         MessageConfiguration messageConfiguration = new MessageConfiguration();
 
+        callDirection.fillCallDirection(msgLines);
+
         for (String item1 : msgLines) {
             ArrayList<String> line = new ArrayList<>(Arrays.asList(item1.split("::")));
+
             try {
                 if (line.size() > 1) {
                     String field = line.get(0);
@@ -80,6 +84,15 @@ public class MessageParser extends XryParser {
             }
         }
 
+        if(callDirection.direction != null)
+        {
+            jsonMsg.put("number",callDirection.contactTel);
+            jsonMsg.put("identifier",callDirection.contactTel);
+            jsonMsg.put("smsc",callDirection.contactTel);
+            jsonMsg.put("name", callDirection.contactName);
+            jsonMsg.put("identifier_name", callDirection.contactName);
+        }
+
         jsonMsg.put("solan_inserted_timestamp", DateTime.now().toString());
 
         System.out.println(jsonMsg);
@@ -96,10 +109,13 @@ public class MessageParser extends XryParser {
             result = result.replace("\t", ":");
             result = result.replace("\r", "");
             result = result.replace(" (Device)", "");
+            result = result.replace("%From%Tel", "%FromTel");
+            result = result.replace("%To%Tel", "%ToTel");
         } catch (Exception ex) {
             _logger.error(ex);
         }
 
         return result;
     }
+
 }

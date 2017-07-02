@@ -16,6 +16,7 @@ public class ConfigurationManager {
     public String contact_json_path;
     public String device_json_path;
     public String message_json_path;
+    public String chat_json_path;
     public String parsers_types_json_path;
 
     private static ConfigurationManager instance = null;
@@ -80,6 +81,7 @@ public class ConfigurationManager {
                 contact_json_path = prop.getProperty("contact_json_path");
                 device_json_path = prop.getProperty("device_json_path");
                 message_json_path = prop.getProperty("message_json_path");
+                chat_json_path = prop.getProperty("chat_json_path");
                 parsers_types_json_path = prop.getProperty("parsers_types_json_path");
             } catch (Exception e) {
                 e.printStackTrace();

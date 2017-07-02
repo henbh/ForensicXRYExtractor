@@ -1,0 +1,21 @@
+{
+  "solan_subtype": null,
+  "identifier": null,
+  "solan_device": null,
+  "solan_context_time": null,
+  "message_id": null,
+  "solan_poi": null,
+  "source": null,
+  "body": null,
+  "solan_inserted_timestamp": null,
+  "solan_case": null,
+  "solan_text_content": null,
+  "party_name": null,
+  "party_id": null,
+  "solan_type": null,
+  "timestamp": null,
+  "related_url": null,
+  "longitude": null,
+  "latitude": null,
+  "attachment_full_path":null
+}
