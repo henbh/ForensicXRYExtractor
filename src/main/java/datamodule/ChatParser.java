@@ -86,7 +86,7 @@ public class ChatParser extends XryParser {
 
         File f = new File(_filePath);
         String extension = FilenameUtils.getExtension(f.getName());
-        String folderType = f.getName().replace(extension,"").replace(".","")+" #";
+        String folderType = f.getName().replace(extension,"").replace(".","")+" @";
         res = _filePath.replace("."+extension, "") + "//" + folderType+folderName + "//";
 
         return res;

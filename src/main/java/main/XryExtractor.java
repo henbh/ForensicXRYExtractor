@@ -94,6 +94,12 @@ public class XryExtractor {
             case CHATS:
                 _xryParser = new ChatParser(_filePath, _logger);
                 break;
+            case CALENDAR_EVENTS:
+                _xryParser = new CalendarParser(_filePath, _logger);
+                break;
+            case WEB_HISTORY:
+                _xryParser = new BrowseHistoryParser(_filePath, _logger);
+                break;
             case NONE:
                 result = false;
                 break;

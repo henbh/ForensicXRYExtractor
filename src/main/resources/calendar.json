@@ -1,0 +1,21 @@
+{
+  "solan_device": null,
+  "solan_context_time": null,
+  "subject": null,
+  "repeat_type": null,
+  "alarm_time": null,
+  "repeat_until": null,
+  "start": null,
+  "repeat_position": null,
+  "repeat_every": null,
+  "description": null,
+  "solan_poi": null,
+  "solan_inserted_timestamp": null,
+  "solan_case": null,
+  "solan_text_content": null,
+  "solan_type": null,
+  "location": null,
+  "end": null,
+  "id": null,
+  "start_date": null
+}
