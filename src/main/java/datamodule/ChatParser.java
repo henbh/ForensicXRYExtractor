@@ -2,17 +2,15 @@ package datamodule;
 
 import configuration.ConfigurationManager;
 import dataconfiguration.ChatConfiguration;
-import dataconfiguration.MessageConfiguration;
-import helpers.CallDirection;
-import helpers.ChatDirection;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.jboss.netty.util.internal.StringUtil;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,6 +43,22 @@ public class ChatParser extends XryParser {
             for (String item : chatList) {
                 if (item.contains("Related Application")) {
                     HashMap msgJsonDoc = extractMessage(item);
+
+                    ArrayList<String> paths = new ArrayList<>();
+                    paths = (ArrayList<String>) msgJsonDoc.get("attachment_full_path");
+
+                    String doc_id = msgJsonDoc.get("doc_id").toString();
+                    String chat_id = msgJsonDoc.get("chat_id").toString();
+
+                    if (paths.size() > 0) {
+                        ArrayList<String> pathToTika = tikaPaths(doc_id, chat_id);
+
+                        for (String item1 : pathToTika) {
+
+                            result.add(item1);
+                        }
+                    }
+
                     saveDocToDB(new JSONObject(msgJsonDoc).toString());
                 }
             }
@@ -53,16 +67,39 @@ public class ChatParser extends XryParser {
         return result;
     }
 
+    private ArrayList<String> tikaPaths(String doc_id, String folderName) {
+        ArrayList<String> result = new ArrayList<>();
+
+        String chatFolder = createFolderPath(folderName);
+
+        File folder = new File(chatFolder);
+        if(folder.exists()) {
+            for (File file : folder.listFiles()) {
+                result.add(String.format("%s#%s", file.getPath(), doc_id));
+            }
+        }
+        return result;
+    }
+
+    private String createFolderPath(String folderName) {
+        String res = null;
+
+        File f = new File(_filePath);
+        String extension = FilenameUtils.getExtension(f.getName());
+        String folderType = f.getName().replace(extension,"").replace(".","")+" #";
+        res = _filePath.replace("."+extension, "") + "//" + folderType+folderName + "//";
+
+        return res;
+    }
+
     private HashMap extractMessage(String msg) {
         UUID uuid = UUID.randomUUID();
         String doc_id = uuid.toString();
-        ChatDirection chatDirection = new ChatDirection();
         HashMap jsonMsg = new HashMap(_jsonDocument);
         String msgtText = textArragment(msg);
         ArrayList<String> msgLines = new ArrayList<>(Arrays.asList(msgtText.split("%")));
         ChatConfiguration chatConfiguration = new ChatConfiguration();
 
-        chatDirection.fillChatDirection(msgLines);
         ArrayList relatedURL = new ArrayList();
         ArrayList filePaths = new ArrayList();
 
@@ -92,9 +129,12 @@ public class ChatParser extends XryParser {
                         }
                     }
                 } else {
-                    String chatId = item1.replace(":", "");
-                    if (StringUtils.isNumeric(chatId)) {
-                        jsonMsg.put("message_id", item1.replace(":", chatId));
+                    if (item1.contains(":")) {
+                        String chatId = item1.replace(":", "");
+                        chatId = chatId.replace(":", chatId);
+                        if (StringUtils.isNumeric(chatId)) {
+                            jsonMsg.put("chat_id", chatId);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -102,12 +142,10 @@ public class ChatParser extends XryParser {
             }
         }
 
-        if (chatDirection.direction != null) {
-            jsonMsg.put("number", chatDirection.contactTel);
-            jsonMsg.put("identifier", chatDirection.contactTel);
-            jsonMsg.put("smsc", chatDirection.contactTel);
-            jsonMsg.put("name", chatDirection.contactName);
-            jsonMsg.put("identifier_name", chatDirection.contactName);
+        String extraData = extractContactInfo(msgLines);
+        if (extraData != null) {
+            jsonMsg.put("party_id", extraData);
+            jsonMsg.put("identifier", extraData);
         }
 
         jsonMsg.put("related_url", relatedURL);
@@ -122,10 +160,13 @@ public class ChatParser extends XryParser {
         String result = null;
 
         try {
-            result = text.replace("\n", "%");
+            result = text.replace("From\r\n", "From");
+            result = result.replace("To\r\n", "To");
+            result = result.replace("\r\n", "%");
             result = result.replace("\t\t\t", ":");
             result = result.replace("\t\t", ":");
             result = result.replace("\t", ":");
+            result = result.replace(": ", "::");
             result = result.replace("\r", "");
             result = result.replace(" (Device)", "");
             result = result.replace(" (Network)", "");
@@ -135,4 +176,52 @@ public class ChatParser extends XryParser {
 
         return result;
     }
+
+    private String extractContactInfo(ArrayList<String> chat) {
+
+        HashMap hashMap = new HashMap();
+        String result = null;
+        try {
+            for (String item : chat) {
+                ArrayList<String> line = new ArrayList<>(Arrays.asList(item.split("::")));
+
+                if (line.size() > 1) {
+                    String field = line.get(0);
+                    String value = line.get(1);
+
+                    if (field.contains("Direction")) {
+                        hashMap.put("Direction", value);
+                    }
+
+                    if (field.contains("ID") && field.contains("From")) {
+                        hashMap.put("from_id", value);
+                    }
+
+                    if (field.contains("ID") && field.contains("To")) {
+                        hashMap.put("to_id", value);
+                    }
+                }
+            }
+
+            if (hashMap.get("Direction") != null) {
+                if (hashMap.get("Direction").toString().contains("Incoming")) {
+                    hashMap.remove("to_id");
+                    if (hashMap.get("from_id") != null) {
+                        result = hashMap.get("from_id").toString();
+                    }
+                }
+                if (hashMap.get("Direction").toString().contains("Outgoing")) {
+                    hashMap.remove("from_id");
+                    if (hashMap.get("to_id") != null) {
+                        result = hashMap.get("to_id").toString();
+                    }
+                }
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+            result = null;
+        }
+        return result;
+    }
+
 }

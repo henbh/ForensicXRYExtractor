@@ -75,5 +75,9 @@ public class ChatConfiguration {
         arrayList93.add("group_name");
         fieldsMap.put("Group Name",arrayList93);
 
+        ArrayList arrayList933 = new ArrayList();
+        arrayList933.add("Path");
+        fieldsMap.put("Path",arrayList933);
+
     }
 }
