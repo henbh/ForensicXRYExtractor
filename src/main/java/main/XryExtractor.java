@@ -100,6 +100,9 @@ public class XryExtractor {
             case WEB_HISTORY:
                 _xryParser = new BrowseHistoryParser(_filePath, _logger);
                 break;
+            case EMAILS:
+                _xryParser = new EmailParser(_filePath, _logger);
+                break;
             case NONE:
                 result = false;
                 break;
