@@ -20,6 +20,7 @@ public class ConfigurationManager {
     public String calendar_json_path;
     public String browse_history_json_path;
     public String email_json_path;
+    public String location_json_path;
     public String parsers_types_json_path;
 
     private static ConfigurationManager instance = null;
@@ -88,6 +89,7 @@ public class ConfigurationManager {
                 calendar_json_path = prop.getProperty("calendar_json_path");
                 browse_history_json_path = prop.getProperty("browse_history_json_path");
                 email_json_path = prop.getProperty("email_json_path");
+                location_json_path = prop.getProperty("location_json_path");
                 parsers_types_json_path = prop.getProperty("parsers_types_json_path");
             } catch (Exception e) {
                 e.printStackTrace();

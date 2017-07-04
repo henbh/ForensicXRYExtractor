@@ -75,7 +75,7 @@ public class ChatParser extends XryParser {
         File folder = new File(chatFolder);
         if(folder.exists()) {
             for (File file : folder.listFiles()) {
-                result.add(String.format("%s#%s", file.getPath(), doc_id));
+                result.add(String.format("%s@%s", file.getPath(), doc_id));
             }
         }
         return result;

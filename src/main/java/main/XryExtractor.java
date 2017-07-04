@@ -103,6 +103,9 @@ public class XryExtractor {
             case EMAILS:
                 _xryParser = new EmailParser(_filePath, _logger);
                 break;
+            case LOC_HISTORY:
+                _xryParser = new LocationParser(_filePath, _logger);
+                break;
             case NONE:
                 result = false;
                 break;
