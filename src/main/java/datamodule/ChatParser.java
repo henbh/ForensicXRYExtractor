@@ -75,7 +75,9 @@ public class ChatParser extends XryParser {
         File folder = new File(chatFolder);
         if(folder.exists()) {
             for (File file : folder.listFiles()) {
-                result.add(String.format("%s@%s", file.getPath(), doc_id));
+                String tika = String.format("%s@%s", file.getPath(), doc_id);
+                result.add(tika);
+                System.out.println("Send File To Tika :: "+tika);
             }
         }
         return result;
@@ -86,7 +88,7 @@ public class ChatParser extends XryParser {
 
         File f = new File(_filePath);
         String extension = FilenameUtils.getExtension(f.getName());
-        String folderType = f.getName().replace(extension,"").replace(".","")+" @";
+        String folderType = f.getName().replace(extension,"").replace(".","")+" #";
         res = _filePath.replace("."+extension, "") + "//" + folderType+folderName + "//";
 
         return res;

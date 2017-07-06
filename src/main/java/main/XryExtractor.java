@@ -26,10 +26,9 @@ public class XryExtractor {
         boolean isParser = createNewParser();
         if (isParser) {
             arrayList = _xryParser.Parse();
-        } else {
-            arrayList.add("");
         }
 
+        arrayList.add("done");
         return arrayList;
     }
 
@@ -76,6 +75,7 @@ public class XryExtractor {
 
         if (map != null) {
             parserType = enums.eParser.valueOf(map.get(fileName));
+            System.out.println("------------------------"+parserType.toString()+"--------------------------");
         }
 
         switch (parserType) {
@@ -105,6 +105,12 @@ public class XryExtractor {
                 break;
             case LOC_HISTORY:
                 _xryParser = new LocationParser(_filePath, _logger);
+                break;
+            case DEVICE_EVENT:
+                _xryParser = new LogParser(_filePath, _logger);
+                break;
+            case DEVICE_INSTALLED_APPS:
+                _xryParser = new AppParser(_filePath, _logger);
                 break;
             case NONE:
                 result = false;

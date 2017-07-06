@@ -21,7 +21,9 @@ public class ConfigurationManager {
     public String browse_history_json_path;
     public String email_json_path;
     public String location_json_path;
+    public String log_json_path;
     public String parsers_types_json_path;
+    public String app_json_path;
 
     private static ConfigurationManager instance = null;
 
@@ -90,7 +92,9 @@ public class ConfigurationManager {
                 browse_history_json_path = prop.getProperty("browse_history_json_path");
                 email_json_path = prop.getProperty("email_json_path");
                 location_json_path = prop.getProperty("location_json_path");
+                log_json_path = prop.getProperty("log_json_path");
                 parsers_types_json_path = prop.getProperty("parsers_types_json_path");
+                app_json_path = prop.getProperty("app_json_path");
             } catch (Exception e) {
                 e.printStackTrace();
             }
