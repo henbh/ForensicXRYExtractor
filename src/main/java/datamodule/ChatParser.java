@@ -76,7 +76,7 @@ public class ChatParser extends XryParser {
         File folder = new File(chatFolder);
         if(folder.exists()) {
             for (File file : folder.listFiles()) {
-                String tika = String.format("%s@%s", file.getPath(), doc_id);
+                String tika = String.format("%s-@@@@-%s", file.getPath(), doc_id);
                 result.add(tika);
                 System.out.println("Send File To Tika :: "+tika);
             }
