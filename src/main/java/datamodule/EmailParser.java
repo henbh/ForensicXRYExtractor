@@ -97,7 +97,7 @@ public class EmailParser extends XryParser {
 
         String subject = jsonContact.get("subject").toString();
         if (subject != null) {
-            subject = subject.replace("RE:","").replace("FWD:","").toLowerCase();
+            subject = subject.replace("RE:","").replace("FWD:","").trim().toLowerCase();
             try {
                 jsonContact.put("thread_topic", signSHA(subject));
             } catch (NoSuchAlgorithmException e) {

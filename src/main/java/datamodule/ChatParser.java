@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -154,6 +155,17 @@ public class ChatParser extends XryParser {
         jsonMsg.put("attachment_full_path", filePaths);
         jsonMsg.put("solan_inserted_timestamp", DateTime.now().toString());
         jsonMsg.put("doc_id", doc_id);
+
+        String identifier = jsonMsg.get("identifier").toString();
+        if (identifier != null) {
+            identifier = identifier.trim().toLowerCase();
+            try {
+                jsonMsg.put("thread_topic", signSHA(identifier));
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+
         System.out.println(jsonMsg);
         return jsonMsg;
     }
