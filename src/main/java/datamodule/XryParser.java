@@ -22,6 +22,9 @@ import org.apache.http.util.EntityUtils;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -195,4 +198,20 @@ public class XryParser implements IXryParser {
 
         return json;
     }
+
+
+    public static String signSHA(String toSign) throws NoSuchAlgorithmException {
+
+        MessageDigest messageDigest = MessageDigest.getInstance("sha-256");
+        InputStream stream = new ByteArrayInputStream(toSign.getBytes(StandardCharsets.UTF_8));
+        //InputStream inputStream = new DigestInputStream(stream, messageDigest);
+        byte[] digest = messageDigest.digest(toSign.getBytes(StandardCharsets.UTF_8));
+        StringBuilder result = new StringBuilder();
+        // Convert to Hexa
+        for (byte aDigest : digest) {
+            result.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
+        }
+        return result.toString();
+    }
+
 }

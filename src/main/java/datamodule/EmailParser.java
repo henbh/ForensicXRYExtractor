@@ -9,6 +9,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class EmailParser extends XryParser {
                                 jsonContact.put(item.toString(), date.toString());
                             } else if (jsonFields.contains("test")) {
                                 if (field.contains("From")) {
-                                   fromEmails.add(value);
+                                    fromEmails.add(value);
                                 } else {
                                     toEmails.add(value);
                                 }
@@ -93,6 +94,16 @@ public class EmailParser extends XryParser {
         jsonContact.put("solan_inserted_timestamp", DateTime.now().toString());
         jsonContact.put("from", fromEmails);
         jsonContact.put("to", toEmails);
+
+        String subject = jsonContact.get("subject").toString();
+        if (subject != null) {
+            subject = subject.replace("RE:","").replace("FWD:","").toLowerCase();
+            try {
+                jsonContact.put("thread_topic", signSHA(subject));
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
 
         System.out.println(jsonContact);
         return jsonContact;

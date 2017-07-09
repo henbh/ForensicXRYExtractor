@@ -17,5 +17,6 @@
   "timestamp": null,
   "status": null,
   "uid": null,
-  "smsc": null
+  "smsc": null,
+  "thread_topic": null
 }
