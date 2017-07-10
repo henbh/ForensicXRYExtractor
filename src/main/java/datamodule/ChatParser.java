@@ -38,32 +38,41 @@ public class ChatParser extends XryParser {
 
         String fileTextContent = readFileText(new File(_filePath));
 
-        if (fileTextContent != null) {
-            ArrayList<String> chatList = new ArrayList<>(Arrays.asList(fileTextContent.split("#")));
+        try {
+            if (fileTextContent != null) {
+                ArrayList<String> chatList = new ArrayList<>(Arrays.asList(fileTextContent.split("#")));
 
-            for (String item : chatList) {
-                if (item.contains("Related Application")) {
-                    HashMap msgJsonDoc = extractMessage(item);
+                for (String item : chatList) {
+                    if (item.contains("Related Application")) {
+                        HashMap msgJsonDoc = extractMessage(item);
 
-                    ArrayList<String> paths = new ArrayList<>();
-                    paths = (ArrayList<String>) msgJsonDoc.get("attachment_full_path");
+                        try {
+                            ArrayList<String> paths = new ArrayList<>();
+                            paths = (ArrayList<String>) msgJsonDoc.get("attachment_full_path");
 
-                    String doc_id = msgJsonDoc.get("doc_id").toString();
-                    String chat_id = msgJsonDoc.get("chat_id").toString();
+                            String doc_id = msgJsonDoc.get("doc_id").toString();
+                            String chat_id = msgJsonDoc.get("chat_id").toString();
 
-                    if (paths.size() > 0) {
-                        ArrayList<String> pathToTika = tikaPaths(doc_id, chat_id);
+                            if (paths.size() > 0) {
+                                ArrayList<String> pathToTika = tikaPaths(doc_id, chat_id);
 
-                        for (String item1 : pathToTika) {
+                                for (String item1 : pathToTika) {
 
-                            result.add(item1);
+                                    result.add(item1);
+                                }
+                            }
+                        }catch (Exception e){
+                            _logger.error(e);
                         }
+                        System.out.println(msgJsonDoc.toString());
+                        saveDocToDB(new JSONObject(msgJsonDoc).toString());
                     }
-
-                    saveDocToDB(new JSONObject(msgJsonDoc).toString());
                 }
             }
+        } catch (Exception e) {
+            _logger.error(e);
         }
+
 
         return result;
     }
@@ -71,16 +80,24 @@ public class ChatParser extends XryParser {
     private ArrayList<String> tikaPaths(String doc_id, String folderName) {
         ArrayList<String> result = new ArrayList<>();
 
-        String chatFolder = createFolderPath(folderName);
+        try {
 
-        File folder = new File(chatFolder);
-        if(folder.exists()) {
-            for (File file : folder.listFiles()) {
-                String tika = String.format("%s-@@@@-%s", file.getPath(), doc_id);
-                result.add(tika);
-                System.out.println("Send File To Tika :: "+tika);
+
+            String chatFolder = createFolderPath(folderName);
+
+            File folder = new File(chatFolder);
+            if (folder.exists()) {
+                for (File file : folder.listFiles()) {
+                    String tika = String.format("%s-@@@@-%s", file.getPath(), doc_id);
+                    result.add(tika);
+                    System.out.println("Send File To Tika :: " + tika);
+                }
             }
+        } catch (Exception e) {
+            result = new ArrayList<>();
+            _logger.error(e);
         }
+
         return result;
     }
 
@@ -89,8 +106,8 @@ public class ChatParser extends XryParser {
 
         File f = new File(_filePath);
         String extension = FilenameUtils.getExtension(f.getName());
-        String folderType = f.getName().replace(extension,"").replace(".","")+" #";
-        res = _filePath.replace("."+extension, "") + "//" + folderType+folderName + "//";
+        String folderType = f.getName().replace(extension, "").replace(".", "") + " #";
+        res = _filePath.replace("." + extension, "") + "//" + folderType + folderName + "//";
 
         return res;
     }
@@ -156,7 +173,7 @@ public class ChatParser extends XryParser {
         jsonMsg.put("solan_inserted_timestamp", DateTime.now().toString());
         jsonMsg.put("doc_id", doc_id);
 
-        String identifier = jsonMsg.get("identifier").toString();
+        String identifier = (String) jsonMsg.get("identifier");
         if (identifier != null) {
             identifier = identifier.trim().toLowerCase();
             try {
@@ -232,7 +249,7 @@ public class ChatParser extends XryParser {
                 }
             }
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
             result = null;
         }
         return result;
