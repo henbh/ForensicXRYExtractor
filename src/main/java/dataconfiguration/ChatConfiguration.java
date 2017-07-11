@@ -27,22 +27,27 @@ public class ChatConfiguration {
 
         ArrayList arrayList2 = new ArrayList();
         arrayList2.add("party_id");
+        arrayList2.add("identifier");
         fieldsMap.put("Facebook ID", arrayList2);
 
         ArrayList arrayList21 = new ArrayList();
         arrayList21.add("party_id");
+        arrayList21.add("identifier");
         fieldsMap.put("Skype ID", arrayList21);
 
         ArrayList arrayList22 = new ArrayList();
         arrayList22.add("party_id");
+        arrayList22.add("identifier");
         fieldsMap.put("Snapchat ID", arrayList22);
 
         ArrayList arrayList23 = new ArrayList();
         arrayList23.add("party_id");
+        arrayList23.add("identifier");
         fieldsMap.put("Telegram ID", arrayList23);
 
         ArrayList arrayList24 = new ArrayList();
         arrayList24.add("party_id");
+        arrayList24.add("identifier");
         fieldsMap.put("WhatsApp ID", arrayList24);
 
         ArrayList arrayList3 = new ArrayList();
