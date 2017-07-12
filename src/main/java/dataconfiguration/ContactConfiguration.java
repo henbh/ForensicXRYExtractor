@@ -23,6 +23,7 @@ public class ContactConfiguration {
 
         ArrayList arrayList4 = new ArrayList();
         arrayList4.add("created_time");
+        arrayList4.add("solan_context_timestamp");
         fieldsMap.put("Created",arrayList4);
 
         ArrayList arrayList2 = new ArrayList();

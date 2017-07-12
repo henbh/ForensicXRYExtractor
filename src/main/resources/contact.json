@@ -18,5 +18,6 @@
   "account_display_name": null,
   "country": null,
   "location": null,
-  "solan_inserted_timestamp": null
+  "solan_inserted_timestamp": null,
+  "solan_context_timestamp" : null
 }

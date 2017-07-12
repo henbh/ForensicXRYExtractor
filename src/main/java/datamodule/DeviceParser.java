@@ -58,7 +58,7 @@ public class DeviceParser extends XryParser {
                     data = dataArr.get(1);
                     ArrayList<String> attArr = new ArrayList<>(Arrays.asList(line.get(2).split("::")));
                     attribute = attArr.get(1);
-                    attribute = attribute.substring(0, attribute.length()-1);
+                    attribute = attribute.substring(0, attribute.length() - 1);
                 } catch (Exception e) {
                     continue;
                 }
@@ -83,6 +83,7 @@ public class DeviceParser extends XryParser {
         }
 
         jsonDevice.put("solan_inserted_timestamp", DateTime.now().toString());
+        jsonDevice.put("solan_context_timestamp", DateTime.now().toString());
 
         System.out.println(jsonDevice);
         return jsonDevice;

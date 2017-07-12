@@ -22,7 +22,7 @@ public class MessageConfiguration {
         fieldsMap.put("Name",arrayList1);
 
         ArrayList arrayList4 = new ArrayList();
-        arrayList4.add("solan_context_time");
+        arrayList4.add("solan_context_timestamp");
         arrayList4.add("timestamp");
         fieldsMap.put("Time",arrayList4);
 

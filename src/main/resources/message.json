@@ -18,5 +18,6 @@
   "status": null,
   "uid": null,
   "smsc": null,
-  "thread_topic": null
+  "thread_topic": null,
+  "solan_context_timestamp":null
 }

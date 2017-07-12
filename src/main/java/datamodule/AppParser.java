@@ -88,6 +88,7 @@ public class AppParser extends XryParser {
         }
 
         jsonContact.put("solan_inserted_timestamp", DateTime.now().toString());
+        jsonContact.put("solan_context_timestamp",DateTime.now().toString());
 
         System.out.println(jsonContact);
         return jsonContact;

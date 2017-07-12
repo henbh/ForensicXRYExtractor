@@ -35,7 +35,7 @@ public class LocationConfiguration {
         fieldsMap.put("Connection Type",arrayList3);
 
         ArrayList arrayList31 = new ArrayList();
-        arrayList31.add("solan_context_time");
+        arrayList31.add("solan_context_timestamp");
         arrayList31.add("timestamp");
         fieldsMap.put("Time",arrayList31);
 

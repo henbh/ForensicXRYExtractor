@@ -6,6 +6,7 @@
   "solan_case": null,
   "solan_type": null,
   "solan_inserted_timestamp": null,
+  "solan_context_timestamp":null,
   "lastAccessed": null,
   "solan_text_content": null,
   "visitCount": null

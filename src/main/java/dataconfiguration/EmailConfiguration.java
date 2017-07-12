@@ -30,12 +30,12 @@ public class EmailConfiguration {
 
         ArrayList arrayList3 = new ArrayList();
         arrayList3.add("mail_timestamp");
-        arrayList3.add("solan_context_time");
+        arrayList3.add("solan_context_timestamp");
         fieldsMap.put("Sent",arrayList3);
 
         ArrayList arrayList31 = new ArrayList();
         arrayList31.add("mail_timestamp");
-        arrayList31.add("solan_context_time");
+        arrayList31.add("solan_context_timestamp");
         fieldsMap.put("Received",arrayList31);
 
         ArrayList arrayList311 = new ArrayList();

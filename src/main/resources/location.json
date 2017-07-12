@@ -4,7 +4,7 @@
   "Category": null,
   "connection_type": null,
   "solan_device": null,
-  "solan_context_time": null,
+  "solan_context_timestamp": null,
   "solan_poi": null,
   "solan_inserted_timestamp": null,
   "pos_coordinates_latitude": null,

@@ -7,5 +7,6 @@
   "solan_type": "log",
   "source": null,
   "log_time": null,
-  "solan_subtype": null
+  "solan_subtype": null,
+  "solan_context_timestamp": null
 }

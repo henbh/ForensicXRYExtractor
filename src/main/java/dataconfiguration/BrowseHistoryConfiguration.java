@@ -30,6 +30,7 @@ public class BrowseHistoryConfiguration {
 
         ArrayList arrayList3 = new ArrayList();
         arrayList3.add("lastAccessed");
+        arrayList3.add("solan_context_timestamp");
         fieldsMap.put("Accessed",arrayList3);
 
         ArrayList arrayList99 = new ArrayList();

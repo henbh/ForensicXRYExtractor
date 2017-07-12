@@ -18,5 +18,6 @@
   "serial_number":null,
   "device_id":null,
   "phone_number":null,
-  "device_info_os_type":null
+  "device_info_os_type":null,
+  "solan_context_timestamp":null
 }

@@ -27,6 +27,7 @@ public class LogConfiguration {
 
         ArrayList arrayList3 = new ArrayList();
         arrayList3.add("log_time");
+        arrayList3.add("solan_context_timestamp");
         fieldsMap.put("Time",arrayList3);
     }
 }
